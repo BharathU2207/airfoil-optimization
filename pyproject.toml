@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "airfoil-opt"
+version = "0.1.0"
+description = "Machine-learning-assisted genetic algorithm framework for airfoil optimisation (CST + surrogate + GA)."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Bharath Udupa", email = "bharath.u03@gmail.com" },
+    { name = "Vedant Vijaykrishnan", email = "vedu432@gmail.com" },
+    { name = "Manikandan Murugaiah", email = "manikandan.m@manipal.edu" }
+]
+license = { text = "MIT" }
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=1.5",
+  "scipy>=1.10",
+  "scikit-learn>=1.3",
+  "xgboost>=1.7",
+  "deap>=1.3",
+  "joblib>=1.2",
+  "matplotlib>=3.7",
+  "pyDOE2>=1.3.0",
+  "typer[all]>=0.9",
+  "pyyaml>=6.0"
+]
+
+[project.scripts]
+airfoil-opt = "airfoil_opt.cli:app"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+select = ["E","F","I","UP","B","N","RUF"]
+ignore = ["E203"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+ignore_missing_imports = true
+strict_optional = true
+check_untyped_defs = true

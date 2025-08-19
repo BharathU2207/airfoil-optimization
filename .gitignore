@@ -1,0 +1,20 @@
+# Virtual Environment
+airfoil_env/
+venv/
+.venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Build and distribution artifacts
+*.egg-info/
+build/
+dist/
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Local run data 
+runs/

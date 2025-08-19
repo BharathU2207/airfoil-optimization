@@ -1,0 +1,55 @@
+# File paths for input data and output results
+paths:
+  dataset: "data/cleaned/data.xlsx"       # Path to the cleaned airfoil dataset used for seeding the population.
+  model: "artifacts/ld_xgb_model.joblib"  # Path to the pre-trained surrogate model (XGBoost).
+  out_dir: "runs"                         # Directory where all results (plots, logs) will be saved.
+
+airfoil:
+  # The 8 CST coefficients defining the baseline airfoil geometry to optimize from.
+  base_cst: [-0.092, -0.044, -0.015, 0.331, 0.269, 0.339, 0.321, 0.364]
+  # The Lift-to-Drag (L/D) ratios of the baseline airfoil at each AoA in 'aoa_list'.
+  base_lds: [18.00591371, 23.84509735, 28.97837326, 33.31542427, 36.82210872, 39.50957297, 41.39264499, 42.54514922, 43.03136975, 42.90546092, 42.18767428, 41.02527038, 39.14518104]
+  aoa_list: [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8]
+  # A performance buffer added to the baseline L/D curve.
+  margin: 1.0
+  # Defines the search space boundary around the baseline airfoil's geometry.
+  scale: 0.20 
+
+# Defines the search space for the 8 CST coefficients.
+bounds:
+  lower: [-0.8, -0.8, -0.8, -0.8,  0.0, 0.0, 0.0, 0.0]
+  upper: [ 0.0,  0.0,  0.0,  0.0,  0.8, 0.8, 0.8, 0.8]
+
+# Core parameters for the Genetic Algorithm
+ga:
+  population: 300              # Number of individuals (airfoils) in each generation.
+  max_generations: 200         # Maximum number of generations to run before stopping.
+  seed_dataset_fraction: 1.0   # Fraction of the initial population to seed with airfoils from the dataset. 1.0 means the entire initial population is seeded.
+  crossover_prob: 0.75         # Probability that two selected parents will undergo crossover.
+  
+  # --- Adaptive Mutation Parameters ---
+  base_indpb: 0.125            # Base per-gene mutation probability (1/8 genes).
+  max_indpb: 0.5               # Maximum per-gene mutation probability when diversity is low.
+  diversity_threshold: 0.05    # If population diversity falls below this, the mutation rate increases.
+  eta_cx: 15.0
+  eta_mut: 20.0
+
+# Parameters for the hypervolume-based termination criterion
+termination:
+  # A reference point in the objective space for hypervolume calculation. Must be worse than any expected outcome.
+  hv_reference_point: [0, 0]
+  # The algorithm will terminate if the hypervolume improvement is less than this percentage (0.1%).
+  stagnation_tolerance: 0.001
+  # Number of consecutive generations with insufficient improvement before termination.
+  stagnation_generations: 10
+
+# Seeds for random number generators to ensure reproducibility
+seed:
+  python: 42
+  numpy: 42
+  deap: 42
+
+# Controls for generating plots
+plotting:
+  show: false
+  save: true
