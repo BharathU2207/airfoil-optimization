@@ -63,7 +63,7 @@ For example, to run a short test with a smaller population and fewer generations
 airfoil-opt optimize --population 50 --generations 10
 ```
 
-## Output
+## 📊 Output
 
 After each run, a new directory is created in the `runs/` folder with a timestamp (e.g., `runs/20250818-093000/`). This directory contains:
 
@@ -72,8 +72,10 @@ After each run, a new directory is created in the `runs/` folder with a timestam
 * **`plots/`**: A folder containing several informative plots, including:
     * `pareto_front.png`: The final Pareto front.
     * `optimized_vs_baseline_shape.png`: A comparison of the final optimized airfoil shape against the baseline.
-    * `f1_over_gens.png` & `f2_over_gens.png`: The evolution of the best and average scores for each objective over the generations.
+    * `peak_ld_over_gens.png` & `CPG_over_gens.png`: The evolution of the best and average scores for each objective over the generations.
     * `airfoil_evolution.png`: Snapshots of the best airfoil shape at different stages of the evolution.
+    * `hv_history.png`: The progression of the hypervolume indicator over generations.
+    * `diversity_over_gens.png`: The population diversity over generations.
 
 ## License
 
