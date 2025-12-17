@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-This repository contains the official implementation for the paper: **"Machine Learning Driven Optimisation of Low-Reynolds Number UAV Airfoils Using Genetic Algorithm"**.
+This repository contains the official implementation for the paper: **"A Surrogate-Assisted Evolutionary Framework for Low-Reynolds-Number Airfoil Optimization"**.
 
 This project provides a data-driven framework for the aerodynamic optimization of low-Reynolds number airfoils, primarily aimed at small UAV applications. It integrates a machine learning surrogate model with a multi-objective genetic algorithm (GA) to rapidly generate and refine high-performance airfoil shapes.
 
