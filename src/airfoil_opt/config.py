@@ -45,6 +45,25 @@ class PlotCfg:
     show: bool
     save: bool
 
+@dataclass 
+class InverseLimitsCfg:
+    min_thickness_limit: float
+    max_thickness_limit: float
+    min_t_pos: float
+    max_t_pos: float
+    min_le_radius: float
+    max_le_radius: float
+    min_camber: float
+    max_camber: float
+    min_c_pos: float
+    max_c_pos: float
+
+@dataclass
+class InverseCfg:
+    target_ld: float
+    target_aoa: float
+    limits: InverseLimitsCfg
+
 @dataclass
 class Cfg:
     raw: Dict[str, Any]
@@ -54,10 +73,15 @@ class Cfg:
     seed: SeedCfg
     plotting: PlotCfg
     termination: TerminationCfg
+    inverse: InverseCfg
 
 def load_config(path: str) -> Cfg:
     with open(path, "r", encoding="utf-8") as f:
         raw = yaml.safe_load(f)
+
+    if "inverse" not in raw:
+        pass
+
     return Cfg(
         raw=raw,
         airfoil=AirfoilCfg(**raw["airfoil"]),
@@ -66,4 +90,9 @@ def load_config(path: str) -> Cfg:
         seed=SeedCfg(**raw["seed"]),
         plotting=PlotCfg(**raw["plotting"]),
         termination=TerminationCfg(**raw["termination"]),
+        inverse=InverseCfg(
+            target_ld=raw["inverse"]["target_ld"],
+            target_aoa=raw["inverse"]["target_aoa"],
+            limits=InverseLimitsCfg(**raw["inverse"]["limits"])
+        )
     )

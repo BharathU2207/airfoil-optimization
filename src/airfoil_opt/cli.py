@@ -4,6 +4,7 @@ from pathlib import Path
 from .config import load_config
 from .paths import Paths
 from .ga.run import run_ga
+from .ga.inverse import run_inverse_optimization
 
 app = typer.Typer(add_completion=False, help="Airfoil optimisation CLI (CST + surrogate + GA).")
 
@@ -25,7 +26,31 @@ def optimize(config: str = typer.Option("configs/default.yaml", help="Path to YA
     repo_root = Path(__file__).resolve().parents[2]  # project root
     paths = Paths.from_config(repo_root, cfg.raw)
     run_dir = run_ga(cfg, paths)
-    typer.echo(f"✅ Finished. Results in: {run_dir}")
+    typer.echo(f"Finished. Results in: {run_dir}")
+
+@app.command()
+def inverse(
+    config: str = typer.Option("configs/default.yaml", help="Path to YAML config."),
+    target_ld: float = typer.Option(None, help="Override target L/D."),
+    target_aoa: float = typer.Option(None, help="Override target AoA.")
+):
+    """
+    Run global inverse design optimization to find an airfoil matching a target L/D.
+    """
+    cfg = load_config(config)
+    
+    # CLI Overrides
+    if target_ld is not None:
+        cfg.inverse.target_ld = target_ld
+        typer.echo(f"CLI Override: Target L/D set to {target_ld}")
+    if target_aoa is not None:
+        cfg.inverse.target_aoa = target_aoa
+        typer.echo(f"CLI Override: Target AoA set to {target_aoa}")
+
+    repo_root = Path(__file__).resolve().parents[2]
+    paths = Paths.from_config(repo_root, cfg.raw)
+    
+    run_inverse_optimization(cfg, paths)
 
 @app.command()
 def clean_data(config: str = typer.Option("configs/default.yaml", help="Path to YAML config.")):

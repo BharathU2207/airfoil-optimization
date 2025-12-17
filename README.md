@@ -12,6 +12,7 @@ This project provides a data-driven framework for the aerodynamic optimization o
 * **Airfoil Parameterization**: Uses the Class-Shape Transformation (CST) method to define airfoil geometries with a minimal set of parameters.
 * **Surrogate Modeling**: Employs a trained XGBoost model to provide high-speed, accurate predictions of aerodynamic efficiency ($l/d$), replacing computationally expensive CFD simulations during optimization.
 * **Multi-Objective Optimization**: Leverages the NSGA-II genetic algorithm to explore the design space, balancing multiple objectives and geometric constraints to produce robust airfoil designs.
+* **Inverse Design**: A global search mode capable of generating valid airfoil geometries from scratch to match specific aerodynamic performance targets ($L/D$ and $\alpha$).
 * **Reproducible & Configurable**: All parameters are managed through a central configuration file, and results from each run are saved to a unique, timestamped directory for full reproducibility.
 
 ## Installation
@@ -45,9 +46,9 @@ To get started, clone the repository and install the required dependencies. It i
 
 The primary way to use this tool is through the command-line interface.
 
-### Quick Start
+### 1. Forward Optimization (Baseline Improvement)
 
-To run an optimization using the default settings specified in `configs/default.yaml`:
+To run the standard multi-objective optimization (improving a baseline airfoil using default settings in `configs/default.yaml`):
 
 ```bash
 airfoil-opt optimize
@@ -63,10 +64,26 @@ For example, to run a short test with a smaller population and fewer generations
 airfoil-opt optimize --population 50 --generations 10
 ```
 
-## 📊 Output
+### 2. Inverse Design (Global Search) 
+To generate a new airfoil geometry from scratch that matches a specific performance target (e.g., Target $L/D=40$ at $6^\circ$ AoA):
+
+```bash
+airfoil-opt inverse
+```
+### Overriding Targets 
+
+You can override the target aerodynamic values directly from the CLI:
+
+```bash 
+airfoil-opt inverse --target-ld 45.0 --target-aoa 5.0
+``` 
+
+
+## Output
 
 After each run, a new directory is created in the `runs/` folder with a timestamp (e.g., `runs/20250818-093000/`). This directory contains:
 
+### Forward Optimization Outputs (airfoil-opt optimize):
 * **`meta.json`**: A complete record of the configuration used for the run and a history of key metrics for each generation.
 * **`pareto.csv`**: The fitness values and CST coefficients of the final Pareto-optimal solutions.
 * **`plots/`**: A folder containing several informative plots, including:
@@ -76,6 +93,19 @@ After each run, a new directory is created in the `runs/` folder with a timestam
     * `airfoil_evolution.png`: Snapshots of the best airfoil shape at different stages of the evolution.
     * `hv_history.png`: The progression of the hypervolume indicator over generations.
     * `diversity_over_gens.png`: The population diversity over generations.
+
+### Inverse Design Outputs (airfoil-opt inverse):
+* **`meta.json`**:  Full experiment log including final error and status.
+
+* **`optimized.dat`**: The final airfoil geometry in standard Selig format (ready for XFOIL/CFD).
+
+* **`optimized_cst.csv`**: The 8 CST coefficients of the generated airfoil.
+
+* **`geometry_plot.png`**: Visual preview of the generated shape.
+
+* **`validation_polar.png`**: A polar curve verifying the airfoil's performance across a range of angles, confirming the target was met.
+
+* **`convergence_plot.png`**: A log-scale plot of the error convergence over generations.
 
 ## License
 

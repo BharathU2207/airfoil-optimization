@@ -2,6 +2,21 @@ from __future__ import annotations
 from deap import tools
 from ..ga.selection import feasible_first
 
+def check_bounds(min_b, max_b):
+    """Decorator to enforce strict bounds after crossover/mutation."""
+    def decorator(func):
+        def wrapper(*args, **kargs):
+            offspring = func(*args, **kargs)
+            for child in offspring:
+                for i in range(len(child)):
+                    if child[i] > max_b[i]:
+                        child[i] = max_b[i]
+                    elif child[i] < min_b[i]:
+                        child[i] = min_b[i]
+            return offspring
+        return wrapper
+    return decorator
+
 def register_operators(
     toolbox,
     bounds_lower,

@@ -17,8 +17,8 @@ airfoil:
 
 # Defines the search space for the 8 CST coefficients.
 bounds:
-  lower: [-0.8, -0.8, -0.8, -0.8,  0.0, 0.0, 0.0, 0.0]
-  upper: [ 0.0,  0.0,  0.0,  0.0,  0.8, 0.8, 0.8, 0.8]
+  lower: [-0.8, -0.8, -0.8, -0.8,  -0.2, -0.2, -0.2, -0.2]
+  upper: [ 0.4,  0.4,  0.4,  0.4,   0.8,  0.8,  0.8,  0.8]
 
 # Core parameters for the Genetic Algorithm
 ga:
@@ -53,3 +53,21 @@ seed:
 plotting:
   show: false
   save: true
+
+# Configuration for Inverse Design (Global Search)
+inverse:
+  target_ld: 40.0
+  target_aoa: 6.0
+  
+  # Absolute physical limits for the airfoil geometry (Global Search Space)
+  limits:
+    min_thickness_limit: 0.05
+    max_thickness_limit: 0.15
+    min_t_pos: 0.15
+    max_t_pos: 0.50
+    min_le_radius: 0.005
+    max_le_radius: 0.08
+    min_camber: 0.00
+    max_camber: 0.15
+    min_c_pos: 0.10
+    max_c_pos: 0.60
